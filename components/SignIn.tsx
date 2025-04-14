@@ -14,36 +14,38 @@ export default () => {
     }
 
     return (
-        <View
-            style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}
-        >
-            <Image
-                containerStyle={{
-                    width: 100,
-                    height: 100,
-                }}
-                PlaceholderContent={<Text>Loading...</Text>}
-            />
-            <PinCode pin={pin} setPin={setPin} showCheck handleSubmit={handleSubmit} />
+        <>
             <View
                 style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 10,
-                    marginTop: 25,
+                    justifyContent: 'center',
                     alignItems: 'center',
                 }}
             >
-                <Button title="Sign Up"
-                    onPress={() => router.push('/(tabs)/signup')} />
-                <Link href="/(tabs)/forgot_pin" asChild
-                ><Text>Forgot Pin?</Text>
-                </Link>
+                <Image
+                    containerStyle={{
+                        width: 100,
+                        height: 100,
+                    }}
+                    PlaceholderContent={<Text>Loading...</Text>}
+                />
+                <PinCode pin={pin} setPin={setPin} showCheck handleSubmit={handleSubmit} />
+                <View
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        gap: 10,
+                        marginTop: 25,
+                        alignItems: 'center',
+                    }}
+                >
+                    <Button title="Sign Up"
+                        onPress={() => router.push('/(tabs)/signup')} />
+                    <Link href="/(tabs)/forgot_pin" asChild
+                    ><Text>Forgot Pin?</Text>
+                    </Link>
+                </View>
             </View>
-        </View>
+        </>
 
     )
 }

@@ -1,9 +1,8 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
-import { Input, Text } from "react-native-elements";
 import PinCode from "./PinCode";
-import { Button } from "@rneui/themed";
+import { Button, Input, Text } from "@rneui/themed";
 
 export default function () {
     const router = useRouter();

@@ -1,3 +1,4 @@
+import UniversalAdd from "@/components/UniversalAdd";
 import { createTheme, ThemeProvider } from "@rneui/themed";
 import { Stack } from "expo-router";
 
@@ -19,6 +20,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider theme={theme}>
       <Stack />
+      <UniversalAdd />
     </ThemeProvider>
   );
 }
