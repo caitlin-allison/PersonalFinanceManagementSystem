@@ -1,12 +1,10 @@
-import { useRouter } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
-import { Input, Text } from "react-native-elements";
 import PinCode from "./PinCode";
-import { Button } from "@rneui/themed";
-
+import { Button, Input, Text } from "@rneui/themed";
+import { Link, useNavigation } from "@react-navigation/native";
 export default function () {
-    const router = useRouter();
+    const navigation = useNavigation();
 
     const [pin, setPin] = useState('');
 
@@ -38,8 +36,11 @@ export default function () {
                 containerStyle={{
                     zIndex: 100,
                 }}
-                onPress={() => router.replace('/home')} />
-
+                onPress={() => navigation.navigate('Home')} />
+            <Link screen="ForgotPin" style={{
+                zIndex: 100,
+                paddingTop: 25
+            }}>Forgot Pin?</Link>
 
         </View>
 
