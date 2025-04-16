@@ -8,6 +8,7 @@ export default function () {
 
     const [pin, setPin] = useState('');
 
+    /// Add Name 
 
     return (
         <View
@@ -37,14 +38,8 @@ export default function () {
                     zIndex: 100,
                 }}
                 onPress={() => {
-                    navigation.navigate('Main', { screen: "Home" })
+                    navigation.navigate('Main')
                 }} />
-
-            <Link screen="ForgotPin"
-                style={{
-                    zIndex: 100,
-                    paddingTop: 25
-                }}>Forgot Pin?</Link>
 
         </View>
 

@@ -48,7 +48,7 @@ export default ({ title, size, showCheck, pin, setPin, handleSubmit }: PinCodePr
         <View key={'finalRow'} style={{
             display: 'flex',
             flexDirection: 'row',
-            justifyContent: 'flex-end',
+            justifyContent: 'center',
             gap: 10,
             width: '100%',
             marginBottom: 25,

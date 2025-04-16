@@ -1,7 +1,7 @@
-import { Link, useNavigation, useRouter } from "expo-router";
 import { useState } from "react";
 import { View, Text } from "react-native";
 import { Button, Image } from "@rneui/themed";
+import { Link, useNavigation } from "@react-navigation/native";
 import PinCode from "./PinCode";
 
 export default () => {
@@ -9,10 +9,6 @@ export default () => {
 
     const navigation = useNavigation();
 
-
-    const handleSubmit = () => {
-        navigation.navigate('Main' as never);
-    }
 
     return (
         <>
@@ -27,9 +23,10 @@ export default () => {
                         width: 100,
                         height: 100,
                     }}
+                    source={require('../assets/logo.png')}
                     PlaceholderContent={<Text>Loading...</Text>}
                 />
-                <PinCode pin={pin} setPin={setPin} showCheck handleSubmit={handleSubmit} />
+                <PinCode pin={pin} setPin={setPin} showCheck handleSubmit={() => navigation.navigate('Main', { screen: 'Home' })} />
                 <View
                     style={{
                         display: 'flex',
@@ -40,8 +37,8 @@ export default () => {
                     }}
                 >
                     <Button title="Sign Up"
-                        onPress={() => handleSubmit()} />
-                    <Link href="../screens/ForgotPinScreen" asChild
+                        onPress={() => navigation.navigate('Main', { screen: 'Home' })} />
+                    <Link screen="ForgotPin"
                     ><Text>Forgot Pin?</Text>
                     </Link>
                 </View>

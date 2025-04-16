@@ -2,16 +2,7 @@ import React from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function ExpensesScreen({ navigation }) {
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={() => navigation.openDrawer()} style={{ marginRight: 15 }}>
-          <Ionicons name="menu" size={30} />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
+export default function BudgetScreen() {
 
   return (
     <View style={styles.container}>
