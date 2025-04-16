@@ -2,16 +2,16 @@ import { Text } from "@rneui/themed"
 import { View } from "react-native"
 import PinCode from "./PinCode"
 import { useState } from "react"
-import { useNavigation, useRouter } from "expo-router"
+import { useNavigation } from "expo-router"
 
-export default () => {
+export function ForgotPinComponent() {
     const navigation = useNavigation();
 
     const [pin, setPin] = useState('')
 
 
     const handleSubmit = () => {
-        navigation.navigate('Home')
+        navigation.navigate('Main', { screen: "Home" })
     }
 
     return (<View

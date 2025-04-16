@@ -36,11 +36,15 @@ export default function () {
                 containerStyle={{
                     zIndex: 100,
                 }}
-                onPress={() => navigation.navigate('Home')} />
-            <Link screen="ForgotPin" style={{
-                zIndex: 100,
-                paddingTop: 25
-            }}>Forgot Pin?</Link>
+                onPress={() => {
+                    navigation.navigate('Main', { screen: "Home" })
+                }} />
+
+            <Link screen="ForgotPin"
+                style={{
+                    zIndex: 100,
+                    paddingTop: 25
+                }}>Forgot Pin?</Link>
 
         </View>
 
