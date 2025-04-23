@@ -1,8 +1,7 @@
-import BillsComponent from '@/components/BillsComponent';
-import { Text } from '@rneui/themed';
+import { AddComponent } from '@/components/AddPage/AddComponent';
 import React from 'react';
 
 export default function AddScreen() {
 
-    return (<Text h1>To be added :P</Text>)
+    return <AddComponent />;
 }

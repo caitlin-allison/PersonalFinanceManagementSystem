@@ -10,7 +10,6 @@ import type { StaticParamList } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SignInScreen from './screens/SignInScreen';
 import BudgetScreen from './screens/BudgetScreen';
-import { Ionicons } from '@expo/vector-icons';
 import { Icon } from '@rneui/themed';
 import BillsScreen from './screens/BillsScreen';
 import AddScreen from './screens/AddScreen';
@@ -70,14 +69,19 @@ function DrawerNavigator() {
                 borderRadius: 50,
                 backgroundColor: 'white',
                 boxShadow: '0px 0px 3px rgba(0, 0, 0, 0.1)',
-                margin: 15,
-                padding: 20,
-
+                justifyContent: 'center', // Ensures content is centered
+                alignItems: 'center',
+                elevation: 5, // Android shadow
+                width: 70, // Ensure the container is large enough to accommodate padding
+                height: 70,
               }}
             ><Icon
-                size={30}
                 name="add"
                 type="material"
+                style={{
+                  zIndex: 1000,
+                }}
+                size={40}
               />
             </View>
           ),

@@ -37,7 +37,7 @@ export default () => {
                     }}
                 >
                     <Button title="Sign Up"
-                        onPress={() => navigation.navigate('Main', { screen: 'Home' })} />
+                        onPress={() => navigation.navigate('SignUp')} />
                     <Link screen="ForgotPin"
                     ><Text>Forgot Pin?</Text>
                     </Link>

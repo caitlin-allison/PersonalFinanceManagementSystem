@@ -18,25 +18,25 @@ export function getPersonalFinanceClassIcon(
                 type="material"
                 {...props}
             />;
-        case PersonalFinanceClasses.EXPENSE:
-            return <Icon
-                name="add-card"
-                type="material"
-                {...props}
-            />;
-        case "EXPENSE":
-            return <Icon
-                name="add-card"
-                type="material"
-                {...props}
-            />;
         case PersonalFinanceClasses.INCOME:
+            return <Icon
+                name="add-card"
+                type="material"
+                {...props}
+            />;
+        case "INCOME":
+            return <Icon
+                name="add-card"
+                type="material"
+                {...props}
+            />;
+        case PersonalFinanceClasses.EXPENSE:
             return <Icon
                 name="attach-money"
                 type="material"
                 {...props}
             />;
-        case "INCOME":
+        case "EXPENSE":
             return <Icon
                 name="attach-money"
                 type="material"
