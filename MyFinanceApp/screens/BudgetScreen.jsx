@@ -34,7 +34,7 @@ export default function BudgetScreen() {
         chartConfig={{ color: () => '#000' }}
         accessor="population"
         backgroundColor="transparent"
-        paddingLeft="0"
+        paddingLeft="100"
         absolute
         hasLegend={false}
       />
