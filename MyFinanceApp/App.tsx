@@ -3,7 +3,6 @@ import Navigation from './Navigation';
 import { createTheme, ThemeProvider } from "@rneui/themed";
 import { Appearance } from 'react-native'; // Use built-in Appearance API
 import { SQLiteProvider, useSQLiteContext, SQLiteDatabase } from 'expo-sqlite';
-import getDatabase, { initializeDatabase } from './db/database';
 
 export default function App() {
   const theme = createTheme({
@@ -31,7 +30,7 @@ export default function App() {
         databaseName="test.db"
         onInit={(db) => {
           console.log('SQLiteProvider initialized.');
-          return initializeDatabase(db);
+          return migrateDbIfNeeded(db);
         }}
       >
         <Navigation />
