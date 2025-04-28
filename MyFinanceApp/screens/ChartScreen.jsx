@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+
 export default function ChartScreen({ navigation }) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
