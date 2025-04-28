@@ -1,23 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { View, Text } from "react-native";
 import { Button, Image } from "@rneui/themed";
 import { Link, useNavigation } from "@react-navigation/native";
 import PinCode from "./PinCode";
-import { useSQLiteContext } from "expo-sqlite";
+import { useUsers } from "@/usehooks/get/useUsers";
 
-export default () => {
-    const db = useSQLiteContext();
-    const [version, setVersion] = useState('');
-    useEffect(() => {
-        async function setup() {
-            const result = await db.getFirstAsync<{ 'sqlite_version()': string }>(
-                'SELECT sqlite_version()'
-            );
-            setVersion(result ? result['sqlite_version()'] : '-1');
-        }
-        setup();
-    }, []);
-
+export function SignInComponent() {
+    const { data: users } = useUsers()
     const [pin, setPin] = useState('');
 
     const navigation = useNavigation();

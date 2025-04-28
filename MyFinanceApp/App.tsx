@@ -1,8 +1,10 @@
 import React from 'react';
 import Navigation from './Navigation';
 import { createTheme, ThemeProvider } from "@rneui/themed";
-import { Appearance } from 'react-native'; // Use built-in Appearance API
-import { SQLiteProvider, useSQLiteContext, SQLiteDatabase } from 'expo-sqlite';
+import { SQLiteProvider, SQLiteDatabase } from 'expo-sqlite';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 export default function App() {
   const theme = createTheme({
@@ -19,9 +21,6 @@ export default function App() {
     },
   });
 
-  // Get the current color scheme (light or dark)
-  const colorScheme = Appearance.getColorScheme();
-
   console.log('App is rendering...');
 
   return (
@@ -33,7 +32,9 @@ export default function App() {
           return migrateDbIfNeeded(db);
         }}
       >
-        <Navigation />
+        <QueryClientProvider client={queryClient}>
+          <Navigation />
+        </QueryClientProvider>
       </SQLiteProvider>
     </ThemeProvider>
   );
