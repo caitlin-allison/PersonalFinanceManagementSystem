@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createNativeStackNavigator, NativeStackHeaderProps } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import GoalsScreen from './screens/GoalsScreen';
 import ExpensesScreen from './screens/BudgetScreen';
@@ -10,7 +10,7 @@ import type { StaticParamList } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SignInScreen from './screens/SignInScreen';
 import BudgetScreen from './screens/BudgetScreen';
-import { Icon } from '@rneui/themed';
+import { Button, Icon } from '@rneui/themed';
 import BillsScreen from './screens/BillsScreen';
 import AddScreen from './screens/AddScreen';
 import { View } from 'react-native';
@@ -27,6 +27,13 @@ const HomeTabs = createBottomTabNavigator({
   screenOptions: ({ route }) => ({
     tabBarActiveTintColor: 'tomato',
     tabBarInactiveTintColor: 'gray',
+    headerRight: () => (
+      <Button
+        onPress={() => alert('This is a button!')}
+        title="Info"
+        color="#fff"
+      />
+    )
   }),
 });
 
@@ -38,7 +45,6 @@ const RootStack = createNativeStackNavigator({
     ForgotPin: ForgotPinScreen,
   },
   initialRouteName: 'SignIn',
-
 });
 function DrawerNavigator() {
   return (
@@ -115,7 +121,8 @@ export default function Navigation() {
         initialRouteName='SignIn'
         screenOptions={{
           headerShown: false,
-        }}>
+        }}
+      >
         {/* Authentication Screens */}
         <RootStack.Screen name="SignIn" component={SignInScreen} />
         <RootStack.Screen name="SignUp" component={SignUpScreen} />

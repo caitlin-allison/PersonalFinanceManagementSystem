@@ -1,10 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import { Button, Image } from "@rneui/themed";
 import { Link, useNavigation } from "@react-navigation/native";
 import PinCode from "./PinCode";
+import { useSQLiteContext } from "expo-sqlite";
 
 export default () => {
+    const db = useSQLiteContext();
+    const [version, setVersion] = useState('');
+    useEffect(() => {
+        async function setup() {
+            const result = await db.getFirstAsync<{ 'sqlite_version()': string }>(
+                'SELECT sqlite_version()'
+            );
+            setVersion(result ? result['sqlite_version()'] : '-1');
+        }
+        setup();
+    }, []);
+
     const [pin, setPin] = useState('');
 
     const navigation = useNavigation();
@@ -26,6 +39,7 @@ export default () => {
                     source={require('../assets/logo.png')}
                     PlaceholderContent={<Text>Loading...</Text>}
                 />
+                {/* <Text>SQLite version: {version}</Text> */}
                 <PinCode pin={pin} setPin={setPin} showCheck handleSubmit={() => navigation.navigate('Main', { screen: 'Home' })} />
                 <View
                     style={{
