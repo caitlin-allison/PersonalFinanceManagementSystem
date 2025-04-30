@@ -41,6 +41,57 @@ async function updateFinanceType(newFinanceClass: GoalFormData | BillFormData | 
 
     const db = useSQLiteContext();
 
-    const result = await db.runAsync('');
-    return result;
+    switch (type) {
+        case PersonalFinanceClasses.INCOME:
+            return await db.runAsync(updateIncomeQuery, [
+                formData.name,
+                formData.amount,
+                formData.isMonthly,
+                formData.payDate ? formData.payDate.toISOString() : null,
+                formData.description,
+                formData.category,
+                formData.id
+            ]) as unknown as UpdateIncome[];
+        case PersonalFinanceClasses.EXPENSE:
+            return await db.runAsync(
+                updateBillQuery,
+                [
+                    formData.name,
+                    formData.amount,
+                    formData.isMonthly,
+                    formData.payDate ? formData.payDate.toISOString() : null,
+                    formData.description,
+                    formData.category,
+                    formData.id,
+                ]) as unknown as UpdateBill[];
+        case PersonalFinanceClasses.GOAL:
+            return await db.runAsync(
+                updateGoalQuery,
+                [
+                    formData.name,
+                    formData.amount,
+                    formData.hasDeadline,
+                    formData.deadlineDate ? formData.deadlineDate.toISOString() : null,
+                    formData.description,
+                    formData.id
+                ]) as unknown as UpdateGoal[];
+        default: throw new Error('Invalid type provided');
+    }
 }
+const updateGoalQuery = `
+UPDATE Goal
+SET Name = ?, Amount = ?, HasDeadli//ne = ?, Date = ?, Description = ?
+WHERE GoalID = ?
+`;
+
+const updateBillQuery = `
+UPDATE Bill
+SET Name = ?, Amount = ?, IsMonthly = ?, Date = ?, Description = ?, Category = ?
+WHERE BillID = ?
+`;
+
+const updateIncomeQuery = `
+UPDATE Income
+SET Name = ?, Amount = ?, IsMonthly = ?, Date = ?, Description = ?, Category = ?
+WHERE IncomeID = ?
+`;
