@@ -36,6 +36,10 @@ export default function BudgetScreen() {
         accessor="population"
         backgroundColor="transparent"
         paddingLeft="100"
+<<<<<<< HEAD
+=======
+        absolute
+>>>>>>> 54d5a26cb64590c37735d26473d333747777f68e
         hasLegend={false}
       />
 <Text style={styles.total}>Total: ${total.toFixed(2)}</Text>

@@ -3,8 +3,10 @@ import { View, Text } from "react-native";
 import { Button, Image } from "@rneui/themed";
 import { Link, useNavigation } from "@react-navigation/native";
 import PinCode from "./PinCode";
+import { useUsers } from "@/usehooks/get/useUsers";
 
-export default () => {
+export function SignInComponent() {
+    const { data: users } = useUsers()
     const [pin, setPin] = useState('');
 
     const navigation = useNavigation();
@@ -26,6 +28,7 @@ export default () => {
                     source={require('../assets/logo.png')}
                     PlaceholderContent={<Text>Loading...</Text>}
                 />
+                {/* <Text>SQLite version: {version}</Text> */}
                 <PinCode pin={pin} setPin={setPin} showCheck handleSubmit={() => navigation.navigate('Main', { screen: 'Home' })} />
                 <View
                     style={{
