@@ -27,15 +27,15 @@ export default function BudgetScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Monthly Bar</Text>
 
+
       <PieChart
         data={pieData}
-        width={screenWidth - 40}
-        height={220}
+        width={screenWidth}
+        height={250}
         chartConfig={{ color: () => '#000' }}
         accessor="population"
         backgroundColor="transparent"
-        paddingLeft="0"
-        absolute
+        paddingLeft="100"
         hasLegend={false}
       />
 <Text style={styles.total}>Total: ${total.toFixed(2)}</Text>
@@ -48,7 +48,6 @@ export default function BudgetScreen() {
               {item.name}: ${item.population}
             </Text>
           </View>
-          
         ))}
       </View>
     </View>
@@ -56,7 +55,7 @@ export default function BudgetScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', paddingTop: 60 },
+  container: { flex: 1, alignItems: 'center', paddingTop: 50 },
   title: { fontSize: 24, fontWeight: 'bold', marginBottom: 5 },
   total: { fontSize: 18, marginBottom: 20, color: '#333' },
 
