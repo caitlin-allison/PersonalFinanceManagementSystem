@@ -5,16 +5,12 @@ export type User = {
     name: string;
     email: string;
     pin: string;
-    createdAt: string;
-    updatedAt: string;
 }
 
 export type Income = {
     id: number;
     userId: number;
     amount: number;
-    createdAt: string;
-    updatedAt: string;
     isMonthly: boolean;
     payDate: Date | null;
     category: IncomeCategory;
@@ -27,8 +23,6 @@ export type Goal = {
     userId: number;
     name: string;
     amount: number;
-    createdAt: string;
-    updatedAt: string;
     hasDeadline: boolean;
     deadlineDate: Date | null;
     description: string;
@@ -40,8 +34,6 @@ export type Bill = {
     userId: number;
     name: string;
     amount: number;
-    createdAt: string;
-    updatedAt: string;
     isMonthly: boolean;
     payDate: Date | null;
     description: string;
