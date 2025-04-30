@@ -37,22 +37,21 @@ export function useFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanc
 async function getFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>) {
 
     const db = useSQLiteContext();
-
+    const userID = 1; // TODO: get user id from context or props
 
     switch (type) {
         case PersonalFinanceClasses.INCOME:
-            return await db.runAsync(incomeQuery) as unknown as Income[];
+            return await db.runAsync(incomeQuery, [userID]) as unknown as Income[];
 
             break;
         case PersonalFinanceClasses.EXPENSE:
-            return await db.runAsync(billQuery) as unknown as Bill[];
+            return await db.runAsync(billQuery, [userID]) as unknown as Bill[];
             break;
         case PersonalFinanceClasses.GOAL:
-            return await db.runAsync(goalQuery) as unknown as Goal[];
+            return await db.runAsync(goalQuery, [userID]) as unknown as Goal[];
             break;
         default:
             throw new Error('Invalid type provided');
-            return [];
     }
 }
 const billQuery = `SELECT * FROM Bill WHERE UserID = ?`;

@@ -40,11 +40,12 @@ interface IncomeFormData {
 async function createFinanceClass(newFinanceClass: GoalFormData | BillFormData | IncomeFormData) {
     const { type, formData } = newFinanceClass;
 
-    const userID = 0;
     const db = useSQLiteContext();
 
     // Call the database function to create a new Finance Class
     // Implement the logic to create a new Finance Class based on the type
+
+    const userID = formData.userId;
 
     switch (type) {
         case PersonalFinanceClasses.INCOME:

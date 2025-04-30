@@ -66,8 +66,7 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
         CREATE TABLE IF NOT EXISTS Goal (GoalID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, Name TEXT NOT NULL, Amount REAL NOT NULL, HasDeadline NCHAR(1),
         Date TEXT, Description TEXT, FOREIGN KEY (UserID) REFERENCES User(UserID));
       `);
-      await db.runAsync('INSERT INTO todos (value, intValue) VALUES (?, ?)', 'hello', 1);
-      await db.runAsync('INSERT INTO todos (value, intValue) VALUES (?, ?)', 'world', 2);
+      await db.runAsync('INSERT INTO USER (UserID, Name, Email, Pin) VALUES (?, ?, ?, ?)', [1, 'Test User', 'user@email.com', '1234']);
       currentDbVersion = 1;
     }
 
