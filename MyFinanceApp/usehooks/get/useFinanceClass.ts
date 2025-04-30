@@ -1,4 +1,4 @@
-import { QueryKey, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "../queryKeys";
 import { Income, Goal, Bill } from "../type";
 import { useSQLiteContext } from "expo-sqlite";
@@ -38,6 +38,25 @@ async function getFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinance
 
     const db = useSQLiteContext();
 
-    const result = await db.runAsync('');
-    return result as unknown as Goal[] | Bill[] | Income[];
+
+    switch (type) {
+        case PersonalFinanceClasses.INCOME:
+            return await db.runAsync(incomeQuery) as unknown as Income[];
+
+            break;
+        case PersonalFinanceClasses.EXPENSE:
+            return await db.runAsync(billQuery) as unknown as Bill[];
+            break;
+        case PersonalFinanceClasses.GOAL:
+            return await db.runAsync(goalQuery) as unknown as Goal[];
+            break;
+        default:
+            throw new Error('Invalid type provided');
+            return [];
+    }
 }
+const billQuery = `SELECT * FROM Bill WHERE UserID = ?`;
+const goalQuery = `
+SELECT * FROM Goal WHERE UserID = ?`
+const incomeQuery = `
+SELECT * FROM Income WHERE UserID = ?`;

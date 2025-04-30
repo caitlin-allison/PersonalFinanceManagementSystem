@@ -20,7 +20,9 @@ async function createUser(newUser: CreateUser) {
     const db = useSQLiteContext();
 
     const result = await db.runAsync(
-        `INSERT INTO users (name, email, pin) VALUES (?, ?, ?)`,
+        `INSERT INTO User (Name, Email, PIN)
+        VALUES (?, ?, ?)
+        `,
         [newUser.name, newUser.email, newUser.pin]
     );
     return result;

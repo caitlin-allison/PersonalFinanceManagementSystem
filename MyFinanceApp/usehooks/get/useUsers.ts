@@ -19,6 +19,6 @@ export const useUsers = () => {
 // Contro
 async function getUsers() {
     const db = useSQLiteContext();
-    const result = await db.getAllAsync('SELECT * FROM users');
+    const result = await db.getAllAsync('SELECT * FROM User');
     return result as User[];
 }
