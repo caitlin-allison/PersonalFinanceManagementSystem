@@ -58,6 +58,17 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
       await db.execAsync(`
         PRAGMA journal_mode = 'wal';
         CREATE TABLE todos (id INTEGER PRIMARY KEY NOT NULL, value TEXT NOT NULL, intValue INTEGER);
+        // Creates User Table
+        CREATE TABLE IF NOT EXISTS User (UserID INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, Email TEXT UNIQUE, PIN TEXT NOT NULL);
+        // Creates Bill Table
+        CREATE TABLE IF NOT EXISTS Bill (BillID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, Name TEXT, Amount REAL NOT NULL, IsMonthly NCHAR(1), Date TEXT NOT NULL,
+        Description TEXT, Category TEXT, FOREIGN KEY (UserID) REFERENCES User(UserID));
+        // Create Income Table
+        CREATE TABLE IF NOT EXISTS Income (IncomeID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, Name TEXT, Amount REAL NOT NULL, IsMonthly NCHAR(1), Date TEXT NOT NULL,
+        Description TEXT, Category TEXT, FOREIGN KEY (UserID) REFERENCES User(UserID));
+        //Create Goal table
+        CREATE TABLE IF NOT EXISTS Goal (GoalID INTEGER PRIMARY KEY AUTOINCREMENT, UserID INTEGER, Name TEXT NOT NULL, Amount REAL NOT NULL, HasDeadline NCHAR(1),
+        Date TEXT, Description TEXT, FOREIGN KEY (UserID) REFERENCES User(UserID));
       `);
       await db.runAsync('INSERT INTO todos (value, intValue) VALUES (?, ?)', 'hello', 1);
       await db.runAsync('INSERT INTO todos (value, intValue) VALUES (?, ?)', 'world', 2);
