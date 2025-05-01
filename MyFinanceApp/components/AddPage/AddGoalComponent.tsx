@@ -1,18 +1,27 @@
-import { CheckBox, color, Input } from "@rneui/base";
-import { Button, View } from "react-native";
-import DropdownComponent from "../DropdownComponent";
+import { CheckBox, Input, Button } from "@rneui/themed";
+import { View } from "react-native";
 import { IncomeCategory, PersonalFinanceClasses } from "@/utils/types";
 import { useState } from "react";
 import { MoneyInput } from "../MoneyInput";
 import { useCreateFinanceType } from "@/usehooks/create/useCreateFinanceClass";
 import React from "react";
 import { CreateGoal } from "@/usehooks/type";
-import { useNavigation } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
+import { useNavigation } from "@react-navigation/native";
+import { useQueryClient } from "@tanstack/react-query";
+import queryKeys from "@/usehooks/queryKeys";
 
 export function AddGoalComponent() {
-    const userId = 1; // TODO: get user id from context or props
+    const queryClient = useQueryClient();
     const navigation = useNavigation();
+    const db = useSQLiteContext();
 
+    const userId = 1; // TODO: get user id from context or props
+
+    // Custom hook to create a new goal
+    const { mutate: createNewGoal, isError, isLoading } = useCreateFinanceType(PersonalFinanceClasses.GOAL, db);
+
+    // State variables for form fields
     const [category, setCategory] = useState<keyof IncomeCategory | null>(null);
     const [name, setName] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
@@ -20,9 +29,12 @@ export function AddGoalComponent() {
     const [description, setDescription] = useState<string>('');
     const [hasDeadline, setHasDeadline] = useState<boolean>(false);
 
-    const { mutate: createNewGoal, isError, isLoading } = useCreateFinanceType(PersonalFinanceClasses.GOAL);
-
-    const handleSubmit = React.useCallback(() => {
+    // Function to handle form submission
+    // - Creates a new goal object with the form data
+    // - Calls the createNewGoal function with the goal object
+    // - On success, invalidates the query cache and resets the form fields, navigating to the home screen
+    // - On error, shows an alert with the error message
+    const handleSubmit = () => {
         const newGoal: CreateGoal = {
             amount,
             category: category as string,
@@ -38,14 +50,23 @@ export function AddGoalComponent() {
             formData: newGoal
         }, {
             onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: queryKeys.all });
+
+                // Reset form fields
+                setAmount(0);
+                setCategory(null);
+                setDate(new Date());
+                setDescription('');
+                setHasDeadline(false);
+                setName('');
+
                 navigation.navigate('Main', { screen: 'Home' })
             },
             onError: (error) => {
                 alert("Error creating goal");
             }
         });
-    }, [amount, category, date, description, hasDeadline, userId, name, createNewGoal, navigation]);
-
+    }
 
     return (
         <View style={{
@@ -112,8 +133,7 @@ export function AddGoalComponent() {
                 />
                 <Button
                     title="Save"
-                    onPress={handleSubmit
-                    }
+                    onPress={handleSubmit}
                 />
             </View>
         </View>

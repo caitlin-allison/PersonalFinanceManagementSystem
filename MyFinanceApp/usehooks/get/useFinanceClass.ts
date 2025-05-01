@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "../queryKeys";
 import { Income, Goal, Bill } from "../type";
-import { useSQLiteContext } from "expo-sqlite";
+import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { PersonalFinanceClasses } from "@/utils/types";
 
 /**
@@ -12,8 +12,8 @@ import { PersonalFinanceClasses } from "@/utils/types";
  * const { data, status } = useFinanceType(PersonalFinanceClasses.INCOME) as Income[];
 */
 export function useFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>) {
+    const db = useSQLiteContext();
     const queryClient = useQueryClient();
-
 
     return useQuery<Goal[] | Bill[] | Income[]>({
         queryKey: type === PersonalFinanceClasses.INCOME
@@ -21,7 +21,7 @@ export function useFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanc
             : type === PersonalFinanceClasses.EXPENSE
                 ? queryKeys.bill
                 : queryKeys.goal,
-        queryFn: () => getFinanceType(type),
+        queryFn: () => getFinanceType(type, db),
         onSettled: () => {
             queryClient.invalidateQueries({
                 queryKey: type === PersonalFinanceClasses.INCOME ?
@@ -34,28 +34,27 @@ export function useFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanc
     });
 }
 
-async function getFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>) {
-
-    const db = useSQLiteContext();
+async function getFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>, db: SQLiteDatabase) {
     const userID = 1; // TODO: get user id from context or props
 
     switch (type) {
         case PersonalFinanceClasses.INCOME:
-            return await db.runAsync(incomeQuery, [userID]) as unknown as Income[];
+            return await db.getAllAsync(incomeQuery, [userID]) as unknown as Income[];
 
             break;
         case PersonalFinanceClasses.EXPENSE:
-            return await db.runAsync(billQuery, [userID]) as unknown as Bill[];
-            break;
+            return await db.getAllAsync(billQuery, [userID]) as unknown as Bill[];
+
         case PersonalFinanceClasses.GOAL:
-            return await db.runAsync(goalQuery, [userID]) as unknown as Goal[];
-            break;
+            return await db.getAllAsync(goalQuery, [userID]) as unknown as Goal[];
+
+
         default:
             throw new Error('Invalid type provided');
     }
 }
-const billQuery = `SELECT * FROM Bill WHERE UserID = ?`;
+const billQuery = `SELECT * FROM Bill WHERE userId = ?`;
 const goalQuery = `
-SELECT * FROM Goal WHERE UserID = ?`
+SELECT * FROM Goal WHERE userId = ?`;
 const incomeQuery = `
-SELECT * FROM Income WHERE UserID = ?`;
+SELECT * FROM Income WHERE userId = ?`;

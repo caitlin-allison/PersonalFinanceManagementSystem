@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "../queryKeys";
 import { CreateUser } from "../type";
-import { useSQLiteContext } from "expo-sqlite";
+import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 
 export function useCreateUser() {
+    const db = useSQLiteContext();
     const queryClient = useQueryClient();
     const query = useMutation({
-        mutationFn: createUser,
+        mutationFn: (user: CreateUser) => createUser(user, db),
         onSettled: () => {
             queryClient.invalidateQueries({
                 queryKey: queryKeys.users,
@@ -16,14 +17,12 @@ export function useCreateUser() {
     return query;
 }
 
-async function createUser(newUser: CreateUser) {
-    const db = useSQLiteContext();
-
+async function createUser(newUser: CreateUser, db: SQLiteDatabase) {
     const result = await db.runAsync(
-        `INSERT INTO User (Name, Email, PIN)
-        VALUES (?, ?, ?)
+        `INSERT INTO User (name, email, phone, pin)
+        VALUES (?, ?, ?, ?)
         `,
-        [newUser.name, newUser.email, newUser.pin]
+        [newUser.name, newUser.email, newUser.phone, newUser.pin]
     );
     return result;
 }

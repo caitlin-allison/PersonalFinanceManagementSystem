@@ -2,18 +2,28 @@ import { Button, CheckBox, Input } from "@rneui/themed";
 import DropdownComponent from "../DropdownComponent";
 import { View } from "react-native";
 import { IncomeCategory, PersonalFinanceClasses } from "@/utils/types";
-import { useState } from "react";
+import React, { useState } from "react";
 import { MoneyInput } from "../MoneyInput";
-import { useNavigation } from "expo-router";
 import { useCreateFinanceType } from "@/usehooks/create/useCreateFinanceClass";
-import React from "react";
 import { CreateIncome } from "@/usehooks/type";
+import { useSQLiteContext } from "expo-sqlite";
+import { useNavigation } from "@react-navigation/native";
+import queryKeys from "@/usehooks/queryKeys";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export function AddIncomeComponent() {
-    const userId = 1; // TODO: get user id from context or props
+    const queryClient = useQueryClient();
     const navigation = useNavigation();
+    const db = useSQLiteContext();
 
+    const userId = 1; // TODO: get user id from context or props
+
+    // Custom hook to create a new income
+    const { mutate: createNewIncome, isError, isLoading } = useCreateFinanceType(PersonalFinanceClasses.INCOME, db);
+
+
+    // State variables for form fields
     const [category, setCategory] = useState<keyof IncomeCategory | null>(null);
     const [name, setName] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
@@ -21,9 +31,11 @@ export function AddIncomeComponent() {
     const [description, setDescription] = useState<string>('');
     const [isMonthly, setIsMonthly] = useState<boolean>(false);
 
-    const { mutate: createNewIncome, isError, isLoading } = useCreateFinanceType(PersonalFinanceClasses.INCOME);
-
-    const handleSubmit = React.useCallback(() => {
+    // Handle form submission
+    // - Create a new income object and pass it to the createNewIncome function
+    // - Reset form fields after successful submission, and navigate to the home screen
+    // - On error, show an alert with the error message
+    const handleSubmit = () => {
         const newIncome: CreateIncome = {
             amount,
             category: category as IncomeCategory,
@@ -39,14 +51,23 @@ export function AddIncomeComponent() {
             formData: newIncome
         }, {
             onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: queryKeys.all });
+
+                // Reset form fields
+                setAmount(0);
+                setCategory(null);
+                setDate(new Date());
+                setDescription('');
+                setIsMonthly(false);
+                setName('');
+
                 navigation.navigate('Main', { screen: 'Home' })
             },
             onError: (error) => {
                 alert("Error creating goal");
             }
         });
-    }, [amount, category, date, description, isMonthly, userId, name, createNewIncome, navigation]);
-
+    }
     return (
         <View style={{
             width: '100%',
@@ -110,8 +131,7 @@ export function AddIncomeComponent() {
                 />
                 <Button
                     title="Save"
-                    onPress={handleSubmit
-                    }
+                    onPress={handleSubmit}
                 />
             </View>
         </View>

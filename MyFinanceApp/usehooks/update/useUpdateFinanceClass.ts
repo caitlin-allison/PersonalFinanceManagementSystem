@@ -1,21 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "../queryKeys";
 import { UpdateBill, UpdateIncome, UpdateGoal } from "../type";
-import { useSQLiteContext } from "expo-sqlite";
+import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { PersonalFinanceClasses } from "@/utils/types";
 
 export function useUpdateFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>) {
+    const db = useSQLiteContext();
     const queryClient = useQueryClient();
 
     const query = useMutation({
-        mutationFn: updateFinanceType,
+        mutationFn: (form: GoalFormData | IncomeFormData | BillFormData) => updateFinanceType(form, db),
         onSettled: () => {
             queryClient.invalidateQueries({
-                queryKey: type === PersonalFinanceClasses.INCOME ?
-                    queryKeys.income :
-                    type === PersonalFinanceClasses.EXPENSE ?
-                        queryKeys.bill :
-                        queryKeys.goal,
+                queryKey: queryKeys.all,
             });
         },
     });
@@ -36,10 +33,9 @@ interface IncomeFormData {
     formData: UpdateIncome
 }
 
-async function updateFinanceType(newFinanceClass: GoalFormData | BillFormData | IncomeFormData) {
+async function updateFinanceType(newFinanceClass: GoalFormData | BillFormData | IncomeFormData, db: SQLiteDatabase) {
     const { type, formData } = newFinanceClass;
 
-    const db = useSQLiteContext();
 
     switch (type) {
         case PersonalFinanceClasses.INCOME:
@@ -49,7 +45,6 @@ async function updateFinanceType(newFinanceClass: GoalFormData | BillFormData | 
                 formData.isMonthly,
                 formData.payDate ? formData.payDate.toISOString() : null,
                 formData.description,
-                formData.category,
                 formData.id
             ]) as unknown as UpdateIncome[];
         case PersonalFinanceClasses.EXPENSE:
@@ -79,19 +74,33 @@ async function updateFinanceType(newFinanceClass: GoalFormData | BillFormData | 
     }
 }
 const updateGoalQuery = `
-UPDATE Goal
-SET Name = ?, Amount = ?, HasDeadli//ne = ?, Date = ?, Description = ?
-WHERE GoalID = ?
+    UPDATE Goal
+        SET name = ?, 
+        amount = ?, 
+        hasDeadline = ?, 
+        date = ?, 
+        description = ?
+    WHERE goalID = ?
 `;
 
 const updateBillQuery = `
-UPDATE Bill
-SET Name = ?, Amount = ?, IsMonthly = ?, Date = ?, Description = ?, Category = ?
-WHERE BillID = ?
+    UPDATE Bill
+        SET name = ?, 
+        amount = ?, 
+        isMonthly = ?, 
+        date = ?, 
+        description = ?, 
+        category = ?
+    WHERE billID = ?
 `;
 
 const updateIncomeQuery = `
-UPDATE Income
-SET Name = ?, Amount = ?, IsMonthly = ?, Date = ?, Description = ?, Category = ?
-WHERE IncomeID = ?
+    UPDATE Income
+        SET name = ?, 
+        amount = ?, 
+        isMonthly = ?, 
+        date = ?, 
+        description = ?, 
+        category = ?
+    WHERE incomeID = ?
 `;

@@ -8,12 +8,23 @@ import { MoneyInput } from "../MoneyInput";
 import { useCreateFinanceType } from "@/usehooks/create/useCreateFinanceClass";
 import React from "react";
 import { CreateBill } from "@/usehooks/type";
-import { useNavigation } from "expo-router";
+import { useSQLiteContext } from "expo-sqlite";
+import { useNavigation } from "@react-navigation/native";
+import { useQueryClient } from "@tanstack/react-query";
+import queryKeys from "@/usehooks/queryKeys";
 
 export function AddBillComponent() {
-    const userId = 1; // TODO: get user id from context or props
+    const queryClient = useQueryClient();
     const navigation = useNavigation();
+    const db = useSQLiteContext();
 
+    const userId = 1; // TODO: get user id from context or props
+
+
+    // Create a new bill using the custom hook
+    const { mutate: createNewBill } = useCreateFinanceType(PersonalFinanceClasses.EXPENSE, db);
+
+    // Form state
     const [category, setCategory] = useState<keyof BillCategory | null>(null);
     const [name, setName] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
@@ -21,9 +32,11 @@ export function AddBillComponent() {
     const [description, setDescription] = useState<string>('');
     const [isMonthly, setIsMonthly] = useState<boolean>(false);
 
-    const { mutate: createNewBill } = useCreateFinanceType(PersonalFinanceClasses.EXPENSE);
-
-    const handleSubmit = React.useCallback(() => {
+    // Handle form submission
+    // - Create a new bill object and pass it to the createNewBill function
+    // - Reset form fields after successful submission, and navigate to the home screen
+    // - On error, show an alert with the error message
+    const handleSubmit = () => {
         const newBill: CreateBill = {
             amount,
             category: category as BillCategory,
@@ -34,11 +47,24 @@ export function AddBillComponent() {
             name,
         }
 
+        // Asynchronously create a new bill
+        // and invalidate the query cache
+        // to refetch the data
         createNewBill({
             type: PersonalFinanceClasses.EXPENSE,
             formData: newBill
         }, {
             onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: queryKeys.all });
+
+                // Reset form fields
+                setAmount(0);
+                setCategory(null);
+                setDate(new Date());
+                setDescription('');
+                setIsMonthly(false);
+                setName('');
+
                 navigation.navigate('Main', { screen: 'Home' })
             },
             onError: (error) => {
@@ -46,8 +72,7 @@ export function AddBillComponent() {
             }
         });
 
-    }, [amount, category, date, description, isMonthly, userId, name, createNewBill, navigation]);
-
+    }
     return (
         <View style={{
             width: '100%',
@@ -110,8 +135,7 @@ export function AddBillComponent() {
                 />
                 <Button
                     title="Save"
-                    onPress={handleSubmit
-                    }
+                    onPress={handleSubmit}
                 />
             </View>
         </View>

@@ -1,21 +1,37 @@
 import { BillCategory, IncomeCategory, PersonalFinanceClasses } from "@/utils/types";
-import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@rneui/themed";
 import React, { useState } from "react";
 import { View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
+interface BillCategoryType {
+    value: keyof BillCategory | null;
+    setValue: React.Dispatch<React.SetStateAction<keyof BillCategory | null>>;
+    type: PersonalFinanceClasses.EXPENSE;
+}
 
-const DropdownComponent = ({ value, setValue, type }:
-    {
-        value: keyof BillCategory | null,
-        setValue: React.Dispatch<React.SetStateAction<keyof BillCategory | null>>,
-        type: PersonalFinanceClasses.EXPENSE | PersonalFinanceClasses.INCOME,
-    }) => {
+interface IncomeCategoryType {
+    value: keyof IncomeCategory | null;
+    setValue: React.Dispatch<React.SetStateAction<keyof IncomeCategory | null>>;
+    type: PersonalFinanceClasses.INCOME;
+}
+
+// Union type for the props
+// Auto detects the type based on the type prop
+type Props = BillCategoryType | IncomeCategoryType;
+
+/**
+ * 
+ * @param value - The selected value of the dropdown
+ * @returns setValue - Function to set the selected value of the dropdown
+ * @param type - The type of the dropdown (expense or income)
+ */
+const DropdownComponent = ({ value, setValue, type }: Props) => {
     const [isFocus, setIsFocus] = useState(false);
 
     const theme = useTheme();
 
+    // Determine Selectable data based on the type
     const data = type === PersonalFinanceClasses.EXPENSE ?
         Object.entries(BillCategory).map(([key, value]) => ({ label: value, value: key })) :
         Object.entries(IncomeCategory).map(([key, value]) => ({ label: value, value: key }));
@@ -50,6 +66,5 @@ const DropdownComponent = ({ value, setValue, type }:
             />
         </View >
     );
-
 }
 export default DropdownComponent;
