@@ -1,12 +1,24 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "../queryKeys";
-import { UpdateUser, User } from "../type";
+import { UpdateUser } from "../type";
 import { useSQLiteContext } from "expo-sqlite";
 
 export function useUpdatePin() {
     const queryClient = useQueryClient();
     const query = useMutation({
-        mutationFn: updatePin,
+        mutationFn: async (newUser: UpdateUser) => {
+            const db = useSQLiteContext();
+
+            const result = await db.runAsync(`
+                UPDATE users 
+                    SET name = ?,
+                    email = ?, 
+                    pin = ? 
+                    WHERE userID = ?`,
+                [newUser.name, newUser.email, newUser.pin, newUser.id]
+            );
+            return result;
+        },
         onSettled: () => {
             queryClient.invalidateQueries({
                 queryKey: queryKeys.users,
@@ -14,18 +26,4 @@ export function useUpdatePin() {
         },
     });
     return query;
-}
-
-async function updatePin(newUser: UpdateUser) {
-    const db = useSQLiteContext();
-
-    const result = await db.runAsync(
-        `UPDATE users 
-        SET name = $name,
-        email = $email, 
-        pin = $pin 
-        WHERE id = $id`,
-        [newUser.name, newUser.email, newUser.pin]
-    );
-    return result;
 }

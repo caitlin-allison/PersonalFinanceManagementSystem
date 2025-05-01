@@ -1,19 +1,19 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator, NativeStackHeaderProps } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import GoalsScreen from './screens/GoalsScreen';
 import ExpensesScreen from './screens/BudgetScreen';
 import SignUpScreen from './screens/SignUpScreen';
-import ForgotPinScreen from './screens/ForgotPinScreen';
 import type { StaticParamList } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SignInScreen from './screens/SignInScreen';
 import BudgetScreen from './screens/BudgetScreen';
-import { Button, Icon } from '@rneui/themed';
+import { Icon } from '@rneui/themed';
 import BillsScreen from './screens/BillsScreen';
 import AddScreen from './screens/AddScreen';
-import { View } from 'react-native';
+import { SafeAreaView, View, Image } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 
@@ -27,13 +27,6 @@ const HomeTabs = createBottomTabNavigator({
   screenOptions: ({ route }) => ({
     tabBarActiveTintColor: 'tomato',
     tabBarInactiveTintColor: 'gray',
-    headerRight: () => (
-      <Button
-        onPress={() => alert('This is a button!')}
-        title="Info"
-        color="#fff"
-      />
-    )
   }),
 });
 
@@ -42,19 +35,37 @@ const RootStack = createNativeStackNavigator({
     Main: HomeTabs,
     SignIn: SignInScreen,
     SignUp: SignUpScreen,
-    ForgotPin: ForgotPinScreen,
+
   },
   initialRouteName: 'SignIn',
+
 });
 function DrawerNavigator() {
   return (
-    <HomeTabs.Navigator initialRouteName="Home">
+    <HomeTabs.Navigator initialRouteName="Home"
+      screenOptions={{
+        headerTitleAlign: 'left',
+
+        headerLeft: () => (
+          <SafeAreaProvider style={{ margin: 15, marginRight: 50 }}>
+            <SafeAreaView >
+              <Image
+                style={{
+                  width: 50,
+                  height: 50,
+                }}
+                source={require('@/public/logo.png')}
+              />
+            </SafeAreaView>
+          </SafeAreaProvider>
+        )
+      }}>
       <HomeTabs.Screen name="Home" component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (<Icon
             name="home"
             type="material"
-          />)
+          />),
         }}
       />
       <HomeTabs.Screen name="Goals" component={GoalsScreen}
@@ -126,8 +137,6 @@ export default function Navigation() {
         {/* Authentication Screens */}
         <RootStack.Screen name="SignIn" component={SignInScreen} />
         <RootStack.Screen name="SignUp" component={SignUpScreen} />
-
-        <RootStack.Screen name="ForgotPin" component={ForgotPinScreen} />
 
         {/* Main App (Drawer Navigator) */}
         <RootStack.Screen name="Main" component={DrawerNavigator} />
