@@ -1,36 +1,42 @@
+import { useFinanceType } from '@/usehooks/get/useFinanceClass';
+import { PersonalFinanceClasses } from '@/utils/types';
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 
-const screenWidth = Dimensions.get('window').width;
-
-const testData = [
-  { name: 'Food', population: 250, color: '#f39c12' },
-  { name: 'Rent', population: 300, color: '#e74c3c' },
-  { name: 'Utilities', population: 120, color: '#2ecc71' },
-  { name: 'Entertainment', population: 150, color: '#9b59b6' },
-];
-
-// Calculate total
-const total = testData.reduce((sum, item) => sum + item.population, 0);
-
-// Clean pie data without labels or legends; tba new verison soon
-const pieData = testData.map(item => ({
-  population: item.population,
-  color: item.color,
-  legendFontColor: 'transparent',
-  legendFontSize: 0,
-}));
-
 export default function BudgetScreen() {
+  const screenWidth = Dimensions.get('window').width;
+
+  // Data from the for Income and expenses
+  const { data: income } = useFinanceType(PersonalFinanceClasses.INCOME);
+  const { data: expenses } = useFinanceType(PersonalFinanceClasses.EXPENSES);
+
+  const testData = [
+    { name: 'Food', population: 250, color: '#f39c12' },
+    { name: 'Rent', population: 300, color: '#e74c3c' },
+    { name: 'Utilities', population: 120, color: '#2ecc71' },
+    { name: 'Entertainment', population: 150, color: '#9b59b6' },
+  ];
+
+  // Calculate total
+  const total = testData.reduce((sum, item) => sum + item.population, 0);
+
+  // Clean pie data without labels or legends; tba new verison soon
+  const pieData = testData.map(item => ({
+    population: item.population,
+    color: item.color,
+    legendFontColor: 'transparent',
+    legendFontSize: 0,
+  }));
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Monthly Bar</Text>
-
       <PieChart
         data={pieData}
-        width={screenWidth - 40}
-        height={220}
+        width={screenWidth}
+        height={250}
         chartConfig={{ color: () => '#000' }}
         accessor="population"
         backgroundColor="transparent"
@@ -38,7 +44,7 @@ export default function BudgetScreen() {
         absolute
         hasLegend={false}
       />
-<Text style={styles.total}>Total: ${total.toFixed(2)}</Text>
+      <Text style={styles.total}>Total: ${total.toFixed(2)}</Text>
 
       <View style={styles.labelGrid}>
         {testData.map((item, index) => (
@@ -48,7 +54,6 @@ export default function BudgetScreen() {
               {item.name}: ${item.population}
             </Text>
           </View>
-          
         ))}
       </View>
     </View>
@@ -56,7 +61,7 @@ export default function BudgetScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', paddingTop: 60 },
+  container: { flex: 1, alignItems: 'center', paddingTop: 50 },
   title: { fontSize: 24, fontWeight: 'bold', marginBottom: 5 },
   total: { fontSize: 18, marginBottom: 20, color: '#333' },
 

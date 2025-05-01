@@ -1,16 +1,57 @@
-import { useState } from "react";
-import { View, Text } from "react-native";
-import { Button, Image } from "@rneui/themed";
-import { Link, useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
+import { View, Image } from "react-native";
+import { Button, Input, useTheme } from "@rneui/themed";
+import { useNavigation } from "@react-navigation/native";
 import PinCode from "./PinCode";
 import { useUsers } from "@/usehooks/get/useUsers";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 export function SignInComponent() {
     const { data: users } = useUsers()
+    const theme = useTheme();
+
     const [pin, setPin] = useState('');
+    const [email, setEmail] = useState<string | null>(users[0]?.email ?? null);
 
     const navigation = useNavigation();
 
+    // Handle form submission
+    // - Validates the pin and email fields
+    // - Checks if the pin is correct and if the user exists
+    // - If validation passes, navigates to the home screen
+    // - If validation fails, shows an alert with the error message
+    // - If the user is not found, shows an alert with the error message
+    const handleSubmit = () => {
+        if (!pin) {
+            alert("Please enter your pin")
+            return;
+        }
+        if (pin.length !== 4) {
+            alert("Pin must be 4 digits")
+            return;
+        }
+        if (users?.length === 0) {
+            alert("No users found")
+            return;
+        }
+        if (users?.[0].pin !== pin) {
+            alert(`Pin is incorrect, try again`)
+            return;
+        }
+        else
+            navigation.navigate('Main', { screen: 'Home' })
+    }
+
+    // useEffect, runs when the data is loaded
+    // - Users may not be loaded yet, so we need to wait for them to be loaded
+    // - If the users array is empty, we return
+    // - If the users array is not empty, we set the email state to the first user's email
+    useEffect(() => {
+        if (users?.length === 0) return
+        setEmail(users[0].email ?? null)
+    }, [users,
+        setEmail,
+        navigation])
 
     return (
         <>
@@ -20,16 +61,29 @@ export function SignInComponent() {
                     alignItems: 'center',
                 }}
             >
-                <Image
+                <SafeAreaProvider style={{ flex: 1, marginTop: 50 }}>
+                    <SafeAreaView >
+                        <Image
+                            style={{
+                                width: 200,
+                                height: 200,
+                                marginBottom: 20,
+                            }}
+                            source={require('@/public/logo.png')}
+                        />
+                    </SafeAreaView>
+                </SafeAreaProvider>
+                <Input placeholder="Email"
                     containerStyle={{
-                        width: 100,
-                        height: 100,
+                        zIndex: 100,
+                        width: '50%',
+                        marginTop: 200,
+                        paddingBottom: 0,
                     }}
-                    source={require('../assets/logo.png')}
-                    PlaceholderContent={<Text>Loading...</Text>}
+                    value={email ?? undefined}
+                    onChangeText={setEmail}
                 />
-                {/* <Text>SQLite version: {version}</Text> */}
-                <PinCode pin={pin} setPin={setPin} showCheck handleSubmit={() => navigation.navigate('Main', { screen: 'Home' })} />
+                <PinCode pin={pin} setPin={setPin} showCheck handleSubmit={handleSubmit} />
                 <View
                     style={{
                         display: 'flex',
@@ -41,9 +95,6 @@ export function SignInComponent() {
                 >
                     <Button title="Sign Up"
                         onPress={() => navigation.navigate('SignUp')} />
-                    <Link screen="ForgotPin"
-                    ><Text>Forgot Pin?</Text>
-                    </Link>
                 </View>
             </View>
         </>

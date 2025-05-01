@@ -4,6 +4,7 @@ export type User = {
     id: number;
     name: string;
     email: string;
+    phone: string;
     pin: string;
 }
 
@@ -26,6 +27,7 @@ export type Goal = {
     hasDeadline: boolean;
     deadlineDate: Date | null;
     description: string;
+    category: string;
 
 }
 
@@ -37,6 +39,7 @@ export type Bill = {
     isMonthly: boolean;
     payDate: Date | null;
     description: string;
+    category: string;
 }
 
 type DeleteFlag = {

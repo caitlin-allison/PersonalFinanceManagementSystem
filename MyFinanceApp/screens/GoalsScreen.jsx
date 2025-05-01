@@ -1,17 +1,11 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, StyleSheet } from 'react-native';
+import { useFinanceType } from '@/usehooks/get/useFinanceClass';
+import { PersonalFinanceClasses } from '@/utils/types';
 
 export default function GoalsScreen({ navigation }) {
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity onPress={() => navigation.openDrawer()} style={{ marginRight: 15 }}>
-          <Ionicons name="menu" size={30} />
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
+  // Data for goals
+  const { data: goals } = useFinanceType(PersonalFinanceClasses.GOAL);
 
   return (
     <View style={styles.container}>

@@ -1,20 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "../queryKeys";
 import { CreateGoal, CreateBill, CreateIncome } from "../type";
-import { useSQLiteContext } from "expo-sqlite";
+import { SQLiteDatabase } from "expo-sqlite";
 import { PersonalFinanceClasses } from "@/utils/types";
 
-export function useCreateFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>) {
+export function useCreateFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>, db: SQLiteDatabase) {
     const queryClient = useQueryClient();
     const query = useMutation({
-        mutationFn: createFinanceClass,
+        mutationFn: (newFinanceClass: GoalFormData | BillFormData | IncomeFormData) => createFinanceClass(db, newFinanceClass),
         onSettled: () => {
             queryClient.invalidateQueries({
-                queryKey: type === PersonalFinanceClasses.INCOME ?
-                    queryKeys.income :
-                    type === PersonalFinanceClasses.EXPENSE ?
-                        queryKeys.bill :
-                        queryKeys.goal,
+                queryKey: queryKeys.all,
             });
         },
     });
@@ -27,28 +23,77 @@ interface GoalFormData {
 }
 interface BillFormData {
     type: PersonalFinanceClasses.EXPENSE,
-    formData: CreateGoal
+    formData: CreateBill
 }
 interface IncomeFormData {
     type: PersonalFinanceClasses.INCOME,
-    formData: CreateGoal
+    formData: CreateIncome
 }
 
 
 
 
-async function createFinanceClass(newFinanceClass: GoalFormData | BillFormData | IncomeFormData) {
+async function createFinanceClass(db: SQLiteDatabase, newFinanceClass: GoalFormData | BillFormData | IncomeFormData) {
     const { type, formData } = newFinanceClass;
-
-    const db = useSQLiteContext();
 
     // Call the database function to create a new Finance Class
     // Implement the logic to create a new Finance Class based on the type
 
-    // Working example
-    const result = await db.runAsync(``
-        // `INSERT INTO users (name, email, pin) VALUES (?, ?, ?)`,
-        // [newUser.name, newUser.email, newUser.pin]
-    );
-    return result;
+    const userID = formData.userId;
+    try {
+        switch (type) {
+            case PersonalFinanceClasses.INCOME:
+                return await db.runAsync(createIncomeQuery, [
+                    userID,
+                    formData.name,
+                    formData.amount,
+                    formData.isMonthly,
+                    formData.payDate ? formData.payDate.toISOString() : null,
+                    formData.description,
+                    formData.category
+                ]) as unknown as CreateIncome[];
+            case PersonalFinanceClasses.EXPENSE:
+                return await db.runAsync(
+                    createBillQuery,
+                    [
+                        userID,
+                        formData.name,
+                        formData.amount,
+                        formData.isMonthly,
+                        formData.payDate ? formData.payDate.toISOString() : null,
+                        formData.description,
+                        formData.category
+                    ]
+                ) as unknown as CreateBill[];
+            case PersonalFinanceClasses.GOAL:
+                return await db.runAsync(
+                    createGoalQuery,
+                    [
+                        userID,
+                        formData.name,
+                        formData.amount,
+                        formData.hasDeadline,
+                        formData.deadlineDate ? formData.deadlineDate.toISOString() : null,
+                        formData.description
+                    ]
+                ) as unknown as CreateGoal[];
+
+        }
+    } catch (error) {
+        console.error("Error creating finance class:", error);
+        throw error;
+    }
 }
+
+const createIncomeQuery = `
+INSERT INTO Income (userID, name, amount, isMonthly, date, description, category)
+VALUES (?, ?, ?, ?, ?, ?, ?)
+`;
+const createBillQuery = `
+INSERT INTO Bill (userID, name, amount, isMonthly, date, description, category)
+VALUES (?, ?, ?, ?, ?, ?, ?)
+`;
+const createGoalQuery = `
+INSERT INTO Goal (userID, name, amount, hasDeadline, date, description)
+VALUES (?, ?, ?, ?, ?, ?)
+`;

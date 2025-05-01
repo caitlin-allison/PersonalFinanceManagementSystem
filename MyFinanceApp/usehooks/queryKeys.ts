@@ -2,9 +2,10 @@ import { PersonalFinanceClasses } from "@/utils/types";
 
 const queryKeys = {
     users: ['users'] as const,
-    income: [PersonalFinanceClasses.INCOME] as const,
-    bill: [PersonalFinanceClasses.EXPENSE] as const,
-    goal: [PersonalFinanceClasses.GOAL] as const,
+    all: ['finance'] as const,
+    income: ['finance', PersonalFinanceClasses.INCOME] as const,
+    bill: ['finance', PersonalFinanceClasses.EXPENSE] as const,
+    goal: ['finance', PersonalFinanceClasses.GOAL] as const,
 
 
 }
