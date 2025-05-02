@@ -3,7 +3,7 @@ import Navigation from './Navigation';
 import { createTheme, ThemeProvider } from "@rneui/themed";
 import { SQLiteProvider, SQLiteDatabase } from 'expo-sqlite';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { UserIdProvider } from './utils/UserIdContextProvider';
+import { UserIdProvider } from './utils/UserContextProvider';
 
 const queryClient = new QueryClient();
 

@@ -3,7 +3,7 @@ import queryKeys from "../queryKeys";
 import { Income, Goal, Bill } from "../type";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { PersonalFinanceClasses } from "@/utils/types";
-import { useUserId } from "@/utils/UserIdContextProvider";
+import { useUser } from "@/utils/UserContextProvider";
 
 /**
  * 
@@ -15,7 +15,8 @@ import { useUserId } from "@/utils/UserIdContextProvider";
 export function useFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>) {
     const db = useSQLiteContext();
     const queryClient = useQueryClient();
-    const { userId } = useUserId();
+    const { user } = useUser();
+    const userId = user?.id;
 
     return useQuery<Goal[] | Bill[] | Income[]>({
         queryKey: type === PersonalFinanceClasses.INCOME

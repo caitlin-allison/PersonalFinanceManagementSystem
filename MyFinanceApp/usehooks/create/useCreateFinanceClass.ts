@@ -3,11 +3,12 @@ import queryKeys from "../queryKeys";
 import { CreateGoal, CreateBill, CreateIncome } from "../type";
 import { SQLiteDatabase } from "expo-sqlite";
 import { PersonalFinanceClasses } from "@/utils/types";
-import { useUserId } from "@/utils/UserIdContextProvider";
+import { useUser } from "@/utils/UserContextProvider";
 
 export function useCreateFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>, db: SQLiteDatabase) {
     const queryClient = useQueryClient();
-    const { userId } = useUserId();
+    const { user } = useUser();
+    const userId = user?.id;
 
     const query = useMutation({
         mutationFn: (newFinanceClass: GoalFormData | BillFormData | IncomeFormData) =>

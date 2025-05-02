@@ -1,5 +1,20 @@
+import { useFinanceType } from "@/usehooks/get/useFinanceClass";
+import { PersonalFinanceClasses } from "@/utils/types";
+import { Text } from "@rneui/themed";
+import { ScrollView } from "react-native";
+import { BillCard } from "./BillCard";
+import { Bill } from "@/usehooks/type";
+
 export default function BillsComponent() {
 
+    const { data: bills } = useFinanceType(PersonalFinanceClasses.EXPENSE);
 
-    return (<></>);
+    return (<>
+        <ScrollView>
+            {bills?.map((bill) => (
+                <BillCard key={bill.id} bill={bill as Bill} />
+            ))}
+            {bills?.length === 0 && <Text>No bills found</Text>}
+        </ScrollView>
+    </>);
 }

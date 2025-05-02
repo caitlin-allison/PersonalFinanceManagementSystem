@@ -5,11 +5,11 @@ import { useNavigation } from "@react-navigation/native";
 import PinCode from "./PinCode";
 import { useUsers } from "@/usehooks/get/useUsers";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { useUserId } from "@/utils/UserIdContextProvider";
+import { useUser } from "@/utils/UserContextProvider";
 
 export function SignInComponent() {
     const { data: users } = useUsers()
-    const { setUserId } = useUserId()
+    const { setUser } = useUser()
     const theme = useTheme();
 
     const [pin, setPin] = useState('');
@@ -43,7 +43,7 @@ export function SignInComponent() {
             return;
         }
         else {
-            setUserId(user.id)
+            setUser(user)
             navigation.navigate('Main', { screen: 'Home' })
         }
     }
