@@ -81,7 +81,7 @@ export default function () {
                         queryClient.invalidateQueries({ queryKey: queryKeys.users })
                         queryClient.invalidateQueries({ queryKey: queryKeys.all })
                         console.log("User created successfully")
-                        navigation.navigate('Main', { screen: 'Home' })
+                        navigation.navigate('SignIn')
                     },
                     onError: (error) => {
                         alert("Error creating user")

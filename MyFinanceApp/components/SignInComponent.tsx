@@ -5,9 +5,11 @@ import { useNavigation } from "@react-navigation/native";
 import PinCode from "./PinCode";
 import { useUsers } from "@/usehooks/get/useUsers";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useUserId } from "@/utils/UserIdContextProvider";
 
 export function SignInComponent() {
     const { data: users } = useUsers()
+    const { setUserId } = useUserId()
     const theme = useTheme();
 
     const [pin, setPin] = useState('');
@@ -22,6 +24,8 @@ export function SignInComponent() {
     // - If validation fails, shows an alert with the error message
     // - If the user is not found, shows an alert with the error message
     const handleSubmit = () => {
+        // Find the user with the given email
+        const user = users?.find(user => user.email === email)
         if (!pin) {
             alert("Please enter your pin")
             return;
@@ -34,12 +38,14 @@ export function SignInComponent() {
             alert("No users found")
             return;
         }
-        if (users?.[0].pin !== pin) {
+        if (user?.pin !== pin) {
             alert(`Pin is incorrect, try again`)
             return;
         }
-        else
+        else {
+            setUserId(user.id)
             navigation.navigate('Main', { screen: 'Home' })
+        }
     }
 
     // useEffect, runs when the data is loaded

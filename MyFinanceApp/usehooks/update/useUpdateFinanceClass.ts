@@ -36,7 +36,6 @@ interface IncomeFormData {
 async function updateFinanceType(newFinanceClass: GoalFormData | BillFormData | IncomeFormData, db: SQLiteDatabase) {
     const { type, formData } = newFinanceClass;
 
-
     switch (type) {
         case PersonalFinanceClasses.INCOME:
             return await db.runAsync(updateIncomeQuery, [
