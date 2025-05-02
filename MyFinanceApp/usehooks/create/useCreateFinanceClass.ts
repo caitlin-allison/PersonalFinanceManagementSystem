@@ -3,11 +3,16 @@ import queryKeys from "../queryKeys";
 import { CreateGoal, CreateBill, CreateIncome } from "../type";
 import { SQLiteDatabase } from "expo-sqlite";
 import { PersonalFinanceClasses } from "@/utils/types";
+import { useUser } from "@/utils/UserContextProvider";
 
 export function useCreateFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>, db: SQLiteDatabase) {
     const queryClient = useQueryClient();
+    const { user } = useUser();
+    const userId = user?.id;
+
     const query = useMutation({
-        mutationFn: (newFinanceClass: GoalFormData | BillFormData | IncomeFormData) => createFinanceClass(db, newFinanceClass),
+        mutationFn: (newFinanceClass: GoalFormData | BillFormData | IncomeFormData) =>
+            createFinanceClass(db, newFinanceClass, userId ?? 0),
         onSettled: () => {
             queryClient.invalidateQueries({
                 queryKey: queryKeys.all,
@@ -33,18 +38,19 @@ interface IncomeFormData {
 
 
 
-async function createFinanceClass(db: SQLiteDatabase, newFinanceClass: GoalFormData | BillFormData | IncomeFormData) {
+async function createFinanceClass(
+    db: SQLiteDatabase,
+    newFinanceClass: GoalFormData | BillFormData | IncomeFormData,
+    userId: number
+) {
     const { type, formData } = newFinanceClass;
 
-    // Call the database function to create a new Finance Class
-    // Implement the logic to create a new Finance Class based on the type
-
-    const userID = formData.userId;
     try {
+        // Based on the type, run the appropriate query with the provided data
         switch (type) {
             case PersonalFinanceClasses.INCOME:
                 return await db.runAsync(createIncomeQuery, [
-                    userID,
+                    userId,
                     formData.name,
                     formData.amount,
                     formData.isMonthly,
@@ -56,7 +62,7 @@ async function createFinanceClass(db: SQLiteDatabase, newFinanceClass: GoalFormD
                 return await db.runAsync(
                     createBillQuery,
                     [
-                        userID,
+                        userId,
                         formData.name,
                         formData.amount,
                         formData.isMonthly,
@@ -69,7 +75,7 @@ async function createFinanceClass(db: SQLiteDatabase, newFinanceClass: GoalFormD
                 return await db.runAsync(
                     createGoalQuery,
                     [
-                        userID,
+                        userId,
                         formData.name,
                         formData.amount,
                         formData.hasDeadline,

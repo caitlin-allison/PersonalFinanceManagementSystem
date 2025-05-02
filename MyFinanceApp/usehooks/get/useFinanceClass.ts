@@ -3,6 +3,7 @@ import queryKeys from "../queryKeys";
 import { Income, Goal, Bill } from "../type";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { PersonalFinanceClasses } from "@/utils/types";
+import { useUser } from "@/utils/UserContextProvider";
 
 /**
  * 
@@ -14,6 +15,8 @@ import { PersonalFinanceClasses } from "@/utils/types";
 export function useFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>) {
     const db = useSQLiteContext();
     const queryClient = useQueryClient();
+    const { user } = useUser();
+    const userId = user?.id;
 
     return useQuery<Goal[] | Bill[] | Income[]>({
         queryKey: type === PersonalFinanceClasses.INCOME
@@ -21,7 +24,7 @@ export function useFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanc
             : type === PersonalFinanceClasses.EXPENSE
                 ? queryKeys.bill
                 : queryKeys.goal,
-        queryFn: () => getFinanceType(type, db),
+        queryFn: () => getFinanceType(type, db, userId ?? 0),
         onSettled: () => {
             queryClient.invalidateQueries({
                 queryKey: type === PersonalFinanceClasses.INCOME ?
@@ -34,19 +37,21 @@ export function useFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanc
     });
 }
 
-async function getFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>, db: SQLiteDatabase) {
-    const userID = 1; // TODO: get user id from context or props
-
+async function getFinanceType(
+    type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>,
+    db: SQLiteDatabase,
+    userId: number
+) {
     switch (type) {
         case PersonalFinanceClasses.INCOME:
-            return await db.getAllAsync(incomeQuery, [userID]) as unknown as Income[];
+            return await db.getAllAsync(incomeQuery, [userId]) as unknown as Income[];
 
             break;
         case PersonalFinanceClasses.EXPENSE:
-            return await db.getAllAsync(billQuery, [userID]) as unknown as Bill[];
+            return await db.getAllAsync(billQuery, [userId]) as unknown as Bill[];
 
         case PersonalFinanceClasses.GOAL:
-            return await db.getAllAsync(goalQuery, [userID]) as unknown as Goal[];
+            return await db.getAllAsync(goalQuery, [userId]) as unknown as Goal[];
 
 
         default:
