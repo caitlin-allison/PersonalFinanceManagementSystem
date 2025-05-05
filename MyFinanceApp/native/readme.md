@@ -1,0 +1,2 @@
+## Native Folder
+Here is where our C++ implementation is held. We have 3 classes Bills, Goal, and Income that were converted into the `FinaceApp` JavaScript and WebAssembly files (.js, .wasm) to be able to implement in JavaScript and TypeScript, as a result.
