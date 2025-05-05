@@ -1,10 +1,10 @@
 import { readAsStringAsync } from 'expo-file-system';
-import MyModule from './assets/wasm/MyClass.js';
+import MyModule from '../FinanceApp.js';
 
-async function loadWasmModule() {
+async function loadBillModule() {
     // Load the .wasm binary
     const wasmBinary = await readAsStringAsync(
-        require('./assets/wasm/MyClass.wasm'),
+        require('../FinanceApp.wasm'),
         'base64'
     );
 
@@ -15,6 +15,8 @@ async function loadWasmModule() {
         // Bill class methods
         _Bill_new,
         _Bill_delete,
+
+        // Getters
         _Bill_getId,
         _Bill_getUserId,
         _Bill_getName,
@@ -24,21 +26,25 @@ async function loadWasmModule() {
         _Bill_getDescription,
         _Bill_getCategory,
 
+        // Setters
+        _Bill_setId,
+        _Bill_setUserId,
+        _Bill_setName,
+        _Bill_setAmount,
+        _Bill_setIsMonthly,
+        _Bill_setPayDate,
+        _Bill_setDescription,
+        _Bill_setCategory,
+
     } = await MyModule({
         wasmBinary: wasmBuffer,
     });
 
     // Create and interact with the C++ class
-    const namePointer = new TextEncoder().encode('World');
-    const instance = _MyClass_new(namePointer);
-
-    const greetPointer = _MyClass_greet(instance);
-    const greetMessage = new TextDecoder().decode(greetPointer);
-
-    console.log(greetMessage); // Output: Hello, World!
+    const instance = _Bill_new();
 
     // Clean up memory
-    _MyClass_delete(instance);
+    _Bill_delete(instance);
 }
 
-loadWasmModule();
+loadBillModule();
