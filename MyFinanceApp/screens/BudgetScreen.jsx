@@ -55,14 +55,13 @@ export default function BudgetScreen() {
     population: data.total,
     color: colorPalette[index % colorPalette.length],
   }));
-
+  // Sort data by amount
   const categoryItems = Object.entries(grouped).reduce((acc, [category, data]) => {
     acc[category] = data.items;
     return acc;
   }, {});
-
   const total = testData.reduce((sum, item) => sum + item.population, 0);
-
+  // Sort testData by population
   const pieData = testData.map(item => ({
     population: item.population,
     color: item.color,
@@ -96,8 +95,6 @@ export default function BudgetScreen() {
 />
 
 </View>
-
-
       <PieChart
         data={pieData}
         width={screenWidth}

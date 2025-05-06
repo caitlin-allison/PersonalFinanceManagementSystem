@@ -20,7 +20,7 @@ export type Income = {
 };
 
 export type Goal = {
-    id: number;
+    goalId: number;
     userId: number;
     name: string;
     amount: number;
@@ -32,7 +32,7 @@ export type Goal = {
 }
 
 export type Bill = {
-    id: number;
+    billID: number;
     userId: number;
     name: string;
     amount: number;

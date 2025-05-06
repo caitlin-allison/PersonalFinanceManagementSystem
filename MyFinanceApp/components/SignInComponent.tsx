@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Image } from "react-native";
-import { Button, Input, useTheme } from "@rneui/themed";
+import { Button, Input, Text, useTheme } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
 import PinCode from "./PinCode";
 import { useUsers } from "@/usehooks/get/useUsers";
