@@ -15,6 +15,6 @@ The code is hosted in [MyFinanceApp folder](./MyFinanceApp). We have the main fo
 This app is enabled through TypeScript/JavaScript, SQLite (DB), Expo (routing), React (UI), and C++ (compiled to Web Assembly) to provide a seamless and cross-platform experience for mobile users of IOS and Android.
 
 # How to Run
-Please refer to [the readme.md for further information](./MyFinanceApp/readme.md).
+Please refer to [the readme.md for further information](./MyFinanceApp/README.md).
 
 ~ readme.md added and edited by Caitlin Allison 5/5/2025
