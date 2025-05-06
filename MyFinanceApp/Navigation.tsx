@@ -16,7 +16,7 @@ import { SafeAreaView, View, Image } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
-
+// Create the Bottom Tab
 const HomeTabs = createBottomTabNavigator({
   screens: {
     Home: HomeScreen,
@@ -30,6 +30,7 @@ const HomeTabs = createBottomTabNavigator({
   }),
 });
 
+// Holds all the possible screens a person can interact with
 const RootStack = createNativeStackNavigator({
   screens: {
     Main: HomeTabs,
@@ -86,7 +87,7 @@ function DrawerNavigator() {
                 borderRadius: 50,
                 backgroundColor: 'white',
                 boxShadow: '0px 0px 3px rgba(0, 0, 0, 0.1)',
-                justifyContent: 'center', // Ensures content is centered
+                justifyContent: 'center',
                 alignItems: 'center',
                 elevation: 5, // Android shadow
                 width: 70, // Ensure the container is large enough to accommodate padding
