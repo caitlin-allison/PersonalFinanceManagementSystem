@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
+import { breakStringAndUppercase } from '@/utils/breakStringAndUppercase';
 
 export default function BudgetScreen() {
   const screenWidth = Dimensions.get('window').width;
@@ -28,7 +29,7 @@ export default function BudgetScreen() {
     const date = new Date(bill.payDate);
     return date.getMonth() === selectedMonth;
   }) || [];
-  
+
 
   // Group expenses by category and calculate totals
   const grouped = expenses?.reduce((acc, bill) => {
@@ -73,28 +74,28 @@ export default function BudgetScreen() {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
 
       <View style={styles.dropdownContainer}>
-  <Text style={styles.label}>Month (Coming Soon):</Text>
-  <RNPickerSelect
-  onValueChange={(value) => {
-    console.log('Selected month:', monthNames[value]);
-  }}
-  value={selectedMonth}
-  items={monthNames.map((month, index) => ({
-    label: month,
-    value: index,
-  }))}
-  style={pickerSelectStyles}
-  useNativeAndroidPickerStyle={false}
-  Icon={() => <Text style={{ fontSize: 16 }}>▼</Text>}
-/>
+        <Text style={styles.label}>Month (Coming Soon):</Text>
+        <RNPickerSelect
+          onValueChange={(value) => {
+            console.log('Selected month:', monthNames[value]);
+          }}
+          value={selectedMonth}
+          items={monthNames.map((month, index) => ({
+            label: month,
+            value: index,
+          }))}
+          style={pickerSelectStyles}
+          useNativeAndroidPickerStyle={false}
+          Icon={() => <Text style={{ fontSize: 16 }}>▼</Text>}
+        />
 
-</View>
+      </View>
       <PieChart
         data={pieData}
         width={screenWidth}
@@ -121,7 +122,7 @@ export default function BudgetScreen() {
           >
             <View style={[styles.dot, { backgroundColor: item.color }]} />
             <Text style={styles.labelText}>
-              {item.name}: ${item.population.toFixed(2)}
+              {breakStringAndUppercase(item.name)}: ${item.population.toFixed(2)}
             </Text>
           </TouchableOpacity>
         ))}
@@ -129,13 +130,13 @@ export default function BudgetScreen() {
 
       {selectedCategory && (
         <View style={styles.detailsSection}>
-          <Text style={styles.detailsHeader}>{selectedCategory} Breakdown</Text>
+          <Text style={styles.detailsHeader}>{breakStringAndUppercase(selectedCategory)} Breakdown</Text>
           {categoryItems[selectedCategory]?.map((item, idx) => (
 
             //delete item from category... add later
 
             <View key={idx} style={styles.detailsItem}>
-              <Text style={styles.detailsName}>{item.name}</Text>
+              <Text style={styles.detailsName}>{breakStringAndUppercase(item.name)}</Text>
               <Text style={styles.detailsAmount}>${item.amount.toFixed(2)}</Text>
             </View>
           ))}
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
     width: 200,
     marginBottom: 20,
   },
-  
+
 });
 
 // Needs both IOS and Android styles for RNPickerSelect
@@ -249,7 +250,7 @@ const pickerSelectStyles = StyleSheet.create({
     color: '#333',
     backgroundColor: '#fff',
     paddingRight: 30,
-    height: 38, 
+    height: 38,
   },
   inputAndroid: {
     fontSize: 14,
@@ -264,7 +265,7 @@ const pickerSelectStyles = StyleSheet.create({
     height: 38,
   },
   iconContainer: {
-    top: 10, 
+    top: 10,
     right: 10,
   },
 });

@@ -1,4 +1,5 @@
 import { Bill } from "@/usehooks/type";
+import { breakStringAndUppercase } from "@/utils/breakStringAndUppercase";
 import { Card, Icon, Text } from "@rneui/themed";
 import { View } from "react-native";
 
@@ -19,12 +20,26 @@ export function BillCard({ bill }: { bill: Bill }) {
                     <Text style={{ color: "green" }}>Monthly</Text>
 
                 </View>)}
-            <Text>Amount: {bill.amount.toLocaleString?.("en-US", {
-                style: "currency",
-                currency: "USD",
-            })}</Text>
-            <Text>Category: {bill.category}</Text>
-            {bill.payDate && (<Text>Pay Date: {new Date(bill.payDate).toLocaleDateString()}</Text>)}
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={{ fontWeight: 700 }}>Amount: </Text>
+                <Text>{bill.amount.toLocaleString?.("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                })}</Text>
+            </View>
+
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Text style={{ fontWeight: 700 }}>Category: </Text><Text>{breakStringAndUppercase(bill.category)}</Text>
+            </View>
+            {!!bill.description && (<View>
+                <Text style={{ fontWeight: 700 }}>Description:</Text>
+                <Text>{bill.description}</Text>
+            </View>)}
+            {bill.payDate && (
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Text style={{ fontWeight: 700 }}>Pay Date:</Text>
+                    <Text>{new Date(bill.payDate).toLocaleDateString()}</Text>
+                </View>)}
         </Card>
 
     )

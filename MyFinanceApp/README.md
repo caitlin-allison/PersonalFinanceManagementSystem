@@ -40,5 +40,5 @@ To learn more about developing your project with Expo, look at the following res
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
 
-~README created and editted by Caitlin Allison (5/5/2025)
+~README created and edited by Caitlin Allison (5/5/2025)
 
