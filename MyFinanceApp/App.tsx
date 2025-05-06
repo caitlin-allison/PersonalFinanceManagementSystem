@@ -8,6 +8,7 @@ import { UserIdProvider } from './utils/UserContextProvider';
 const queryClient = new QueryClient();
 
 export default function App() {
+  // Provides consistent CSS to the entire app when importing components from '@rneui/themed'
   const theme = createTheme({
     mode: 'light',
     lightColors: {
@@ -23,8 +24,6 @@ export default function App() {
       },
     },
   });
-
-  console.log('App is rendering...');
 
   return (
     <ThemeProvider theme={theme}>
@@ -45,19 +44,23 @@ export default function App() {
   );
 }
 
+/**
+ * migrateDbIfNeeded
+ * This functions servers to sync up to our SQLite DB, and create a new one if it does not already exist.
+*/
 async function migrateDbIfNeeded(db: SQLiteDatabase) {
   try {
-    console.log('Starting database migration...');
+
     const DATABASE_VERSION = 1;
     const result = await db.getFirstAsync<{ user_version: number }>('PRAGMA user_version');
-    console.log('Current database version:', result?.user_version);
+
     let currentDbVersion = result?.user_version ?? 0;
     if (currentDbVersion >= DATABASE_VERSION) {
       console.log('Database is up-to-date.');
       return;
     }
 
-    // if (currentDbVersion === 0) {
+    if (currentDbVersion === 0) {
     console.log('Setting up initial database schema...');
     await db.execAsync(`
         PRAGMA journal_mode = 'wal';
@@ -106,13 +109,10 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
         );
       `);
     currentDbVersion = 1;
-
-
-    // }
+    }
 
     await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 
-    console.log('Database migration completed.');
   } catch (error) {
     console.error('Database migration failed:', error);
   }
