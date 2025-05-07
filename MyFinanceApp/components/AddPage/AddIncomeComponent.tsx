@@ -10,6 +10,7 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useNavigation } from "@react-navigation/native";
 import queryKeys from "@/usehooks/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
+import { useUser } from "@/utils/UserContextProvider";
 
 
 export function AddIncomeComponent() {
@@ -17,7 +18,7 @@ export function AddIncomeComponent() {
     const navigation = useNavigation();
     const db = useSQLiteContext();
 
-    const userId = 1; // TODO: get user id from context or props
+    const userId = useUser().user?.userID as number;
 
     // Custom hook to create a new income
     const { mutate: createNewIncome, isError, isLoading } = useCreateFinanceType(PersonalFinanceClasses.INCOME, db);

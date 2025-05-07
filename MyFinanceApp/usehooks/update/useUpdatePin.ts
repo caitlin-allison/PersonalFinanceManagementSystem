@@ -15,7 +15,7 @@ export function useUpdatePin() {
                     email = ?, 
                     pin = ? 
                     WHERE userID = ?`,
-                [newUser.name, newUser.email, newUser.pin, newUser.id]
+                [newUser.name, newUser.email, newUser.pin, newUser.userID]
             );
             return result;
         },

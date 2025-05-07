@@ -12,13 +12,14 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useNavigation } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import queryKeys from "@/usehooks/queryKeys";
+import { useUser } from "@/utils/UserContextProvider";
 
 export function AddBillComponent() {
     const queryClient = useQueryClient();
     const navigation = useNavigation();
     const db = useSQLiteContext();
 
-    const userId = 1; // TODO: get user id from context or props
+    const userId = useUser().user?.userID as number;
 
 
     // Create a new bill using the custom hook

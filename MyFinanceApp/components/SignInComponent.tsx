@@ -6,8 +6,11 @@ import PinCode from "./PinCode";
 import { useUsers } from "@/usehooks/get/useUsers";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useUser } from "@/utils/UserContextProvider";
+import { useQueryClient } from "@tanstack/react-query";
+import queryKeys from "@/usehooks/queryKeys";
 
 export function SignInComponent() {
+    const queryClient = useQueryClient()
     const { data: users } = useUsers()
     const { setUser } = useUser()
     const theme = useTheme();
@@ -44,6 +47,11 @@ export function SignInComponent() {
         }
         else {
             setUser(user)
+            queryClient.invalidateQueries({
+                predicate: (query) =>
+                    query.queryKey[0] === queryKeys.all[0]
+
+            })
             navigation.navigate('Main', { screen: 'Home' })
         }
     }

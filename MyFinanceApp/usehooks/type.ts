@@ -1,7 +1,7 @@
 import { IncomeCategory } from "@/utils/types";
 
 export type User = {
-    id: number;
+    userID: number;
     name: string;
     email: string;
     phone: string;
@@ -47,10 +47,10 @@ type DeleteFlag = {
     id: number;
 }
 
-export type CreateUser = Omit<User, "id" | "createdAt" | "updatedAt">;
+export type CreateUser = Omit<User, "userID" | "createdAt" | "updatedAt">;
 export type CreateIncome = Omit<Income, "id" | "createdAt" | "updatedAt">;
-export type CreateGoal = Omit<Goal, "id" | "createdAt" | "updatedAt">;
-export type CreateBill = Omit<Bill, "id" | "createdAt" | "updatedAt">;
+export type CreateGoal = Omit<Goal, "goalId" | "createdAt" | "updatedAt">;
+export type CreateBill = Omit<Bill, "billID" | "createdAt" | "updatedAt">;
 
 export type UpdateUser = Omit<User, "createdAt" | "updatedAt">;
 export type UpdateIncome = Omit<Income, "createdAt" | "updatedAt">;

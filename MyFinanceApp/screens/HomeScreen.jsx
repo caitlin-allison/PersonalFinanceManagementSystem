@@ -40,20 +40,19 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.greeting}>Welcome, {userName}!</Text>
-
       <View style={styles.quoteBox}>
         <Text style={styles.quoteIcon}>💡</Text>
         <Text style={styles.quote}>{randomQuote}</Text>
       </View>
 
       <View style={styles.cardRow}>
-        <View style={[styles.card, { backgroundColor: '#d1f7c4' }]}> 
+        <View style={[styles.card, { backgroundColor: '#d1f7c4' }]}>
           <MaterialIcons name="attach-money" size={24} color="#2e7d32" />
           <Text style={styles.cardLabel}>Income</Text>
           <Text style={styles.cardAmount}>${incomeTotal.toFixed(2)}</Text>
         </View>
 
-        <View style={[styles.card, { backgroundColor: '#fddede' }]}> 
+        <View style={[styles.card, { backgroundColor: '#fddede' }]}>
           <MaterialIcons name="money-off" size={24} color="#c62828" />
           <Text style={styles.cardLabel}>Expenses</Text>
           <Text style={styles.cardAmount}>${expenseTotal.toFixed(2)}</Text>

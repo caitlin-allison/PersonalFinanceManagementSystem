@@ -16,22 +16,22 @@ export function useFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanc
     const db = useSQLiteContext();
     const queryClient = useQueryClient();
     const { user } = useUser();
-    const userId = user?.id;
+    const userId = user?.userID;
 
     return useQuery<Goal[] | Bill[] | Income[]>({
         queryKey: type === PersonalFinanceClasses.INCOME
-            ? queryKeys.income
+            ? queryKeys.income(user?.userID ?? 0)
             : type === PersonalFinanceClasses.EXPENSE
-                ? queryKeys.bill
-                : queryKeys.goal,
-        queryFn: () => getFinanceType(type, db, userId ?? 0),
+                ? queryKeys.bill(user?.userID ?? 0)
+                : queryKeys.goal(user?.userID ?? 0),
+        queryFn: () => getFinanceType(type, db, user?.userID ?? 0),
         onSettled: () => {
             queryClient.invalidateQueries({
                 queryKey: type === PersonalFinanceClasses.INCOME ?
-                    queryKeys.income :
+                    queryKeys.income(user?.userID ?? 0) :
                     type === PersonalFinanceClasses.EXPENSE ?
-                        queryKeys.bill :
-                        queryKeys.goal,
+                        queryKeys.bill(user?.userID ?? 0) :
+                        queryKeys.goal(user?.userID ?? 0),
             });
         },
     });

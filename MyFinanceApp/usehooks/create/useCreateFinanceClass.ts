@@ -8,7 +8,7 @@ import { useUser } from "@/utils/UserContextProvider";
 export function useCreateFinanceType(type: Omit<PersonalFinanceClasses, PersonalFinanceClasses.BUDGET>, db: SQLiteDatabase) {
     const queryClient = useQueryClient();
     const { user } = useUser();
-    const userId = user?.id;
+    const userId = user?.userID as number;
 
     const query = useMutation({
         mutationFn: (newFinanceClass: GoalFormData | BillFormData | IncomeFormData) =>
