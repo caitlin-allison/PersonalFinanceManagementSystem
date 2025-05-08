@@ -53,10 +53,10 @@ async function updateFinanceType(newFinanceClass: GoalFormData | BillFormData | 
                     formData.name,
                     formData.amount,
                     formData.isMonthly,
-                    formData.payDate ? formData.payDate.toISOString() : null,
+                    formData.date ? formData.date.toISOString() : null,
                     formData.description,
                     formData.category,
-                    formData.id,
+                    formData.billID,
                 ]) as unknown as UpdateBill[];
         case PersonalFinanceClasses.GOAL:
             return await db.runAsync(
@@ -65,9 +65,9 @@ async function updateFinanceType(newFinanceClass: GoalFormData | BillFormData | 
                     formData.name,
                     formData.amount,
                     formData.hasDeadline,
-                    formData.deadlineDate ? formData.deadlineDate.toISOString() : null,
+                    formData.date ? formData.date.toISOString() : null,
                     formData.description,
-                    formData.id
+                    formData.goalID
                 ]) as unknown as UpdateGoal[];
         default: throw new Error('Invalid type provided');
     }
