@@ -13,10 +13,7 @@ export default function BillsComponent() {
         <ScrollView>
             {/* Loop through the bills and render a BillCard for each one */}
             {bills?.map((bill) => (
-                <>
-                    <Text key={(bill as Bill).billID} h4>{JSON.stringify(bill as Bill)}</Text>
-                    <BillCard key={(bill as Bill).billID} bill={bill as Bill} />
-                </>
+                <BillCard key={(bill as Bill).billID} bill={bill as Bill} />
             ))}
             {bills?.length === 0 && <Text>No bills found</Text>}
         </ScrollView>

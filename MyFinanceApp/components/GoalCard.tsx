@@ -4,7 +4,7 @@ import { View } from "react-native";
 
 export function GoalCard({ goal }: { goal: Goal }) {
     return (
-        <Card key={goal.goalId}>
+        <Card key={goal.goalID}>
             <Card.Title>{goal.name}</Card.Title>
             <Card.Divider />
             <View style={{ flexDirection: "row" }}>
@@ -19,7 +19,11 @@ export function GoalCard({ goal }: { goal: Goal }) {
                     <Text style={{ fontWeight: "bold" }}>Description: </Text>
                     <Text>{goal.description}</Text>
                 </View>)}
-            {goal.deadlineDate && (<Text>Pay Date: {new Date(goal.deadlineDate).toLocaleDateString()}</Text>)}
+            {goal.date && goal.hasDeadline && (
+                <View style={{ flexDirection: "row" }}>
+                    <Text style={{ fontWeight: "bold" }}>Deadline: </Text>
+                    <Text>{goal.date.toLocaleDateString()}</Text>
+                </View>)}
         </Card >
 
     )

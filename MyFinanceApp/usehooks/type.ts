@@ -20,12 +20,12 @@ export type Income = {
 };
 
 export type Goal = {
-    goalId: number;
+    goalID: number;
     userId: number;
     name: string;
     amount: number;
     hasDeadline: boolean;
-    deadlineDate: Date | null;
+    date: Date | null;
     description: string;
     category: string;
 
@@ -37,7 +37,7 @@ export type Bill = {
     name: string;
     amount: number;
     isMonthly: boolean;
-    payDate: Date | null;
+    date: Date | null;
     description: string;
     category: string;
 }
@@ -49,7 +49,7 @@ type DeleteFlag = {
 
 export type CreateUser = Omit<User, "userID" | "createdAt" | "updatedAt">;
 export type CreateIncome = Omit<Income, "id" | "createdAt" | "updatedAt">;
-export type CreateGoal = Omit<Goal, "goalId" | "createdAt" | "updatedAt">;
+export type CreateGoal = Omit<Goal, "goalID" | "createdAt" | "updatedAt">;
 export type CreateBill = Omit<Bill, "billID" | "createdAt" | "updatedAt">;
 
 export type UpdateUser = Omit<User, "createdAt" | "updatedAt">;

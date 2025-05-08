@@ -13,7 +13,7 @@ export default function GoalComponent() {
         <ScrollView>
             {/* Loop through the goals and render a GoalCard for each one */}
             {goals?.map((goal) => (
-                <GoalCard key={`${(goal as Goal).goalId}}-${goal.name}`} goal={goal as Goal} />
+                <GoalCard key={`${(goal as Goal).goalID}}-${goal.name}`} goal={goal as Goal} />
             ))}
             {goals?.length === 0 && <Text>No goals found</Text>}
         </ScrollView>

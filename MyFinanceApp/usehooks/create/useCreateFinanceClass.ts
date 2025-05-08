@@ -45,6 +45,8 @@ async function createFinanceClass(
 ) {
     const { type, formData } = newFinanceClass;
 
+    console.log("Creating finance class:", type, formData);
+
     try {
         // Based on the type, run the appropriate query with the provided data
         switch (type) {
@@ -66,7 +68,7 @@ async function createFinanceClass(
                         formData.name,
                         formData.amount,
                         formData.isMonthly,
-                        formData.payDate ? formData.payDate.toISOString() : null,
+                        formData.date ? formData.date.toISOString() : null,
                         formData.description,
                         formData.category
                     ]
@@ -79,7 +81,7 @@ async function createFinanceClass(
                         formData.name,
                         formData.amount,
                         formData.hasDeadline,
-                        formData.deadlineDate ? formData.deadlineDate.toISOString() : null,
+                        formData.date ? formData.date.toISOString() : null,
                         formData.description
                     ]
                 ) as unknown as CreateGoal[];

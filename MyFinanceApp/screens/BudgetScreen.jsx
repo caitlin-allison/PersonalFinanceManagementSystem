@@ -26,7 +26,7 @@ export default function BudgetScreen() {
 
   //Group expenses by month
   const filteredExpenses = expenses?.filter(bill => {
-    const date = new Date(bill.payDate);
+    const date = new Date(bill.date);
     return date.getMonth() === selectedMonth;
   }) || [];
 

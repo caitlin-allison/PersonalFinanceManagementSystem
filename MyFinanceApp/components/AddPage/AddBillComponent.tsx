@@ -12,7 +12,10 @@ import { useSQLiteContext } from "expo-sqlite";
 import { useNavigation } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import queryKeys from "@/usehooks/queryKeys";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { useUser } from "@/utils/UserContextProvider";
+import { DatePickerComponent } from "./DatePickerComponent";
+// import { DatePickerComponent } from "./DatePickerComponent";
 
 export function AddBillComponent() {
     const queryClient = useQueryClient();
@@ -30,6 +33,7 @@ export function AddBillComponent() {
     const [name, setName] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
     const [date, setDate] = useState<Date>(new Date());
+
     const [description, setDescription] = useState<string>('');
     const [isMonthly, setIsMonthly] = useState<boolean>(false);
 
@@ -41,7 +45,7 @@ export function AddBillComponent() {
         const newBill: CreateBill = {
             amount,
             category: category as BillCategory,
-            payDate: date,
+            date: date,
             description,
             isMonthly,
             userId,
@@ -109,11 +113,7 @@ export function AddBillComponent() {
                         backgroundColor: 'transparent',
                     }}
                 />
-                <Input
-                    placeholder="Date"
-                    value={date.toLocaleDateString()}
-                    onChangeText={(text) => setDate(new Date(text))}
-                />
+                <DatePickerComponent date={date} setDate={setDate} />
             </View>
             <Input
                 placeholder="Description"

@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import queryKeys from "@/usehooks/queryKeys";
 import { useUser } from "@/utils/UserContextProvider";
+import { DatePickerComponent } from "./DatePickerComponent";
 
 export function AddGoalComponent() {
     const queryClient = useQueryClient();
@@ -39,7 +40,7 @@ export function AddGoalComponent() {
         const newGoal: CreateGoal = {
             amount,
             category: category as string,
-            deadlineDate: hasDeadline ? date : null,
+            date: hasDeadline ? date : null,
             description,
             hasDeadline,
             name,
@@ -106,11 +107,7 @@ export function AddGoalComponent() {
                     }}
                 />
                 {hasDeadline && (
-                    <Input
-                        placeholder="Deadline Date"
-                        value={date.toLocaleDateString()}
-                        onChangeText={(text) => setDate(new Date(text))}
-                    />
+                    <DatePickerComponent date={date} setDate={setDate} />
                 )}
             </View>
             <Input

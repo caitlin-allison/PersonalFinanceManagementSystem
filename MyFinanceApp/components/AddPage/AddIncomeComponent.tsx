@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import queryKeys from "@/usehooks/queryKeys";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/utils/UserContextProvider";
+import { DatePickerComponent } from "./DatePickerComponent";
 
 
 export function AddIncomeComponent() {
@@ -105,11 +106,7 @@ export function AddIncomeComponent() {
                         backgroundColor: 'transparent',
                     }}
                 />
-                <Input
-                    placeholder="Date"
-                    value={date.toLocaleDateString()}
-                    onChangeText={(text) => setDate(new Date(text))}
-                />
+                <DatePickerComponent date={date} setDate={setDate} />
             </View>
             <Input
                 placeholder="Description"

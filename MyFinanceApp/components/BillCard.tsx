@@ -6,7 +6,7 @@ import { View } from "react-native";
 export function BillCard({ bill }: { bill: Bill }) {
     return (
         <Card key={bill.billID}>
-            <Card.Title>{bill.name}</Card.Title>
+            <Card.Title>{bill.name}-{typeof bill.isMonthly}-{bill.isMonthly}</Card.Title>
             <Card.Divider />
             {bill.isMonthly && (
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -35,10 +35,10 @@ export function BillCard({ bill }: { bill: Bill }) {
                 <Text style={{ fontWeight: 700 }}>Description:</Text>
                 <Text>{bill.description}</Text>
             </View>)}
-            {bill.payDate && (
+            {bill.date && (
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <Text style={{ fontWeight: 700 }}>Pay Date:</Text>
-                    <Text>{new Date(bill.payDate).toLocaleDateString()}</Text>
+                    <Text>{bill.date.toLocaleDateString()}</Text>
                 </View>)}
         </Card>
 
